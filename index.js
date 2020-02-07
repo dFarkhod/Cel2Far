@@ -14,7 +14,7 @@ async function PredictCelciusToFarhrenheit() {
     // Yuqoridagi ma'lumotni modelimizga kiritib, modelni o'qitamiz (training):
     const modelResult = await model.fit(data, labels, {
         epochs: 800, // davrlar soni - ya'ni modelni necha marta o'qitish soni
-        callbacks: { onEpochEnd: (epoch, logs) => console.log(logs.loss) } 
+        callbacks: {onEpochEnd} 
         // har bir o'qitish davri tugaganida (onEpochEnd xodisasi) konsolga o'qitishning natijasidagi xatolar
         // miqdori chiqariladi...e'tibor bering xato miqdori borgan sayin kamayib boradi.
         }
@@ -24,6 +24,13 @@ async function PredictCelciusToFarhrenheit() {
     // Ya'ni, harorat tselziy bo'yicha 15 daraja bo'lganida, farengeytda u qancha bo'lishini modelimiz bizga aniqlab beradi:
     const predictionResult = model.predict(tf.tensor2d([15], [1, 1]));
     predictionResult.print();
+}
+function onEpochEnd(epoch, logs) {
+    console.log('Loss: ', logs.loss);
+}
+
+function onBatchEnd(batch, logs) {
+    console.log('Accuracy: ', logs.acc);
 }
 
 
